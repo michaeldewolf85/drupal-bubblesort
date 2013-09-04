@@ -107,25 +107,25 @@ function bubblesort_form($form, &$form_state) {
   );
 
   $form['bubblesort']['index'] = array(
-    '#title' => 'index',
+    '#title' => t('index'),
     '#type' => 'textfield',
     '#value' => $s['watch']['index']
   );
 
   $form['bubblesort']['current'] = array(
-    '#title' => 'current',
+    '#title' => t('Current'),
     '#type' => 'textfield',
     '#value' => $s['watch']['current']
   );
 
   $form['bubblesort']['next'] = array(
-    '#title' => 'next',
+    '#title' => t('Next'),
     '#type' => 'textfield',
     '#value' => $s['watch']['next']
   );
 
   $form['bubblesort']['to_swap'] = array(
-    '#title' => 'Will be swaped',
+    '#title' => t('Will be swaped'),
     '#type' => 'textfield',
     '#value' => $s['watch']['to_swap'] ? 'true' : 'false'
   );
