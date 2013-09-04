@@ -55,7 +55,7 @@ function _bubblesort_to_swap(&$arr, &$i, &$j) {
 /**
  * Runs bubble sort iteration.
  */
-function _bubblesort_iteration(&$arr, &$i, &$j) {
+function _bubblesort_step(&$arr, &$i, &$j) {
 
   // Compares two values.
   if (_bubblesort_to_swap($arr, $i, $j)) {
@@ -88,14 +88,20 @@ function _bubblesort_watch(&$arr, &$i, &$j) {
 function bubblesort_form($form, &$form_state) {
   $form = array();
 
-  if (empty($form_state['storage'])) {
-    $form_state['storage'] = array();
-    $s =& $form_state['storage'];
+  $in_progress = true; 
+  $form_state['storage'] = empty($form_state['storage']) ? array() : $form_state['storage'];
+  $s =& $form_state['storage'];
+  $op = empty($form_state['values']['op']) ? '' : $form_state['values']['op'];
 
-    // Init values
+  if (empty($s) || $op == t('Shuffle')) {
     $s['arr'] = _bubblesort_shuffle();
     $s['i'] = 0;
     $s['j'] = 0;
+    $s['watch'] = _bubblesort_watch($s['arr'], $s['i'], $s['j']);
+  }
+
+  if ($op == t('Step')) {
+    $in_progress = _bubblesort_step($s['arr'], $s['i'], $s['j']);
     $s['watch'] = _bubblesort_watch($s['arr'], $s['i'], $s['j']);
   }
 
@@ -103,42 +109,69 @@ function bubblesort_form($form, &$form_state) {
     '#type' => 'container',
     '#prefix' => '<div id="bubblesort">',
     '#suffix' => '</div>',
-    '#disabled' => 'true'
   );
 
   $form['bubblesort']['index'] = array(
     '#title' => t('index'),
     '#type' => 'textfield',
-    '#value' => $s['watch']['index']
+    '#value' => $s['watch']['index'],
+    '#disabled' => 'true'
   );
 
   $form['bubblesort']['current'] = array(
     '#title' => t('Current'),
     '#type' => 'textfield',
-    '#value' => $s['watch']['current']
+    '#value' => $s['watch']['current'],
+    '#disabled' => 'true'
   );
 
   $form['bubblesort']['next'] = array(
     '#title' => t('Next'),
     '#type' => 'textfield',
-    '#value' => $s['watch']['next']
+    '#value' => $s['watch']['next'],
+    '#disabled' => 'true'
   );
 
   $form['bubblesort']['to_swap'] = array(
     '#title' => t('Will be swaped'),
     '#type' => 'textfield',
-    '#value' => $s['watch']['to_swap'] ? 'true' : 'false'
+    '#value' => $s['watch']['to_swap'] ? 'true' : 'false',
+    '#disabled' => 'true'
   );
 
-  $form['bubblesort']['init'] = array(
+  $form['bubblesort']['shuffle'] = array(
     '#type' => 'submit',
     '#value' => t('Shuffle'),
+    '#executes_submit_callback' => false,
+    '#ajax' => array(
+      'callback' => 'bubblesort_form_ajax',
+      'wrapper' => 'bubblesort',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+  );
+
+  $form['bubblesort']['step'] = array(
+    '#type' => 'submit',
+    '#value' => t('Step'),
+    '#executes_submit_callback' => false,
+    '#ajax' => array(
+      'callback' => 'bubblesort_form_ajax',
+      'wrapper' => 'bubblesort',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+    '#disabled' => !$in_progress
   );
 
   return $form;
 }
 
+function bubblesort_form_ajax($form, &$form_state) {
+  return $form['bubblesort'];
+}
+
 function bubblesort_form_submit($form, &$form_state) {
-  
+
 }
 
