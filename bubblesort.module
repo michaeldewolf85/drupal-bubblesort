@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function bubblesort_permission() {
+  return array(
+    'use bubblesort' => array(
+      'title' => t('Use Bubble Sort Similation'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function bubblesort_menu() {
+  $items['bubblesort'] = array(
+    'title' => 'Bubble Sort Simulation',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bubblesort_form'),
+    'access arguments' => array('bubblesort'),
+  );
+
+  return $items;
+}
+
+/**
+ * Returns random array[0..9] of values 0..100.
+ */
+function _bubblesort_shuffle() {
+  $arr = array();
+  for ($i = 0; $i < 10; $i++) {
+    $arr[] = rand(0, 100);
+  }
+  return $arr;
+}
+
+/**
+ * Swaps two values in the array.
+ */
+function _bubblesort_swap(&$arr, $a, $b) {
+  $tmp = $arr[$a];
+  $arr[$a] = $arr[$b];
+  $arr[$b] = $tmp;
+}
+
+/**
+ * Checks if we need to swap.
+ */
+function _bubblesort_to_swap(&$arr, &$i, &$j) {
+  return $arr[$j+1] < $arr[$j];
+}
+
+/**
+ * Runs bubble sort iteration.
+ */
+function _bubblesort_iteration(&$arr, &$i, &$j) {
+
+  // Compares two values.
+  if (_bubblesort_to_swap($arr, $i, $j)) {
+    _bubblesort_swap($arr, $j, $j+1, $log);
+  }
+
+  // Iterates.
+  $j++;
+  if ($j >= count($arr) - $i - 1) {
+    $j = 0; $i++;
+  }
+  if ($i >= count($arr)) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Watch data.
+ */
+function _bubblesort_watch(&$arr, &$i, &$j) {
+  return array(
+    'index' => $j,
+    'current' => isset($arr[$j]) ? $arr[$j] : 'n/a',
+    'next' => isset($arr[$j+1]) ? $arr[$j+1] : 'n/a',
+    'to_swap' =>  isset($arr[$j]) &&  isset($arr[$j+1]) ? _bubblesort_to_swap($arr, $i, $j) : 'n/a'
+  );
+}
+
+function bubblesort_form($form, &$form_state) {
+  $form = array();
+
+  if (empty($form_state['storage'])) {
+    $form_state['storage'] = array();
+    $s =& $form_state['storage'];
+
+    // Init values
+    $s['arr'] = _bubblesort_shuffle();
+    $s['i'] = 0;
+    $s['j'] = 0;
+    $s['watch'] = _bubblesort_watch($s['arr'], $s['i'], $s['j']);
+  }
+
+  $form['bubblesort'] = array(
+    '#type' => 'container',
+    '#prefix' => '<div id="bubblesort">',
+    '#suffix' => '</div>',
+    '#disabled' => 'true'
+  );
+
+  $form['bubblesort']['index'] = array(
+    '#title' => 'index',
+    '#type' => 'textfield',
+    '#value' => $s['watch']['index']
+  );
+
+  $form['bubblesort']['current'] = array(
+    '#title' => 'current',
+    '#type' => 'textfield',
+    '#value' => $s['watch']['current']
+  );
+
+  $form['bubblesort']['next'] = array(
+    '#title' => 'next',
+    '#type' => 'textfield',
+    '#value' => $s['watch']['next']
+  );
+
+  $form['bubblesort']['to_swap'] = array(
+    '#title' => 'Will be swaped',
+    '#type' => 'textfield',
+    '#value' => $s['watch']['to_swap'] ? 'true' : 'false'
+  );
+
+  $form['bubblesort']['init'] = array(
+    '#type' => 'submit',
+    '#value' => t('Shuffle'),
+  );
+
+  return $form;
+}
+
+function bubblesort_form_submit($form, &$form_state) {
+  
+}
+

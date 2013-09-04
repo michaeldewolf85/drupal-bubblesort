@@ -1,0 +1,6 @@
+name = Bubble Sort Simulation
+description = Provides Buble Sort Simulation
+package = Other
+version = VERSION
+core = 7.x
+
