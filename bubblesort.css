@@ -1,0 +1,16 @@
+#bubblesort .form-item-index,
+#bubblesort .form-item-current,
+#bubblesort .form-item-next,
+#bubblesort .form-item-to-swap {
+  width: 120px;
+  display: inline-block;
+  margin-right: 20px;
+
+}
+
+#bubblesort [id^="edit-index"],
+#bubblesort [id^="edit-current"],
+#bubblesort [id^="edit-next"],
+#bubblesort [id^="edit-to-swap"] {
+  width: 120px;
+}

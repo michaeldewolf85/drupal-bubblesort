@@ -86,6 +86,8 @@ function _bubblesort_watch(&$arr, &$i, &$j) {
 }
 
 function bubblesort_form($form, &$form_state) {
+  drupal_add_css(drupal_get_path('module', 'bubblesort') . '/bubblesort.css');
+
   $form = array();
 
   $in_progress = true; 
@@ -137,6 +139,21 @@ function bubblesort_form($form, &$form_state) {
     '#type' => 'textfield',
     '#value' => $s['watch']['to_swap'] ? 'true' : 'false',
     '#disabled' => 'true'
+  );
+
+  $options = array();
+  foreach ($s['arr'] as $key => $value) {
+    $options[$key] = $key . ': ' . $value;
+  }
+
+  //Build the tableselect.
+  $form['bubblesort']['arr'] = array(
+    '#type' => 'select',
+    '#options' => $options,
+    '#disabled' => TRUE,
+    '#multiple' => FALSE,
+    '#size' => 10,
+    '#value' => $s['watch']['index']
   );
 
   $form['bubblesort']['shuffle'] = array(
