@@ -86,15 +86,23 @@ function _bubblesort_watch(&$arr, &$i, &$j) {
 }
 
 function bubblesort_form($form, &$form_state) {
+  // Add CSS file.
   drupal_add_css(drupal_get_path('module', 'bubblesort') . '/bubblesort.css');
 
   $form = array();
 
-  $in_progress = true; 
+  // Get or init storage.
   $form_state['storage'] = empty($form_state['storage']) ? array() : $form_state['storage'];
   $s =& $form_state['storage'];
-  $op = empty($form_state['values']['op']) ? '' : $form_state['values']['op'];
 
+  // Get button.
+  $op = empty($form_state['values']['op']) ? '' : $form_state['values']['op'];
+  
+  // Set status.
+  $in_progress = true;
+
+
+  // Proccess Shuffle button click.
   if (empty($s) || $op == t('Shuffle')) {
     $s['arr'] = _bubblesort_shuffle();
     $s['i'] = 0;
@@ -102,6 +110,7 @@ function bubblesort_form($form, &$form_state) {
     $s['watch'] = _bubblesort_watch($s['arr'], $s['i'], $s['j']);
   }
 
+  // Process Step button click.
   if ($op == t('Step')) {
     $in_progress = _bubblesort_step($s['arr'], $s['i'], $s['j']);
     $s['watch'] = _bubblesort_watch($s['arr'], $s['i'], $s['j']);
@@ -141,13 +150,9 @@ function bubblesort_form($form, &$form_state) {
     '#disabled' => 'true'
   );
 
-  $options = array();
-  foreach ($s['arr'] as $key => $value) {
-    $options[$key] = $key . ': ' . $value;
-  }
-
+  // Draw chart
   $chart = array(
-    '#chart_id' => 'test_chart',
+    '#chart_id' => 'chart',
     '#type' => CHART_TYPE_BAR_V_GROUPED,
     '#title' => '',
     '#size' => array(
@@ -158,10 +163,17 @@ function bubblesort_form($form, &$form_state) {
 
   $color_a = chart_unique_color('color_a');
   $color_b = chart_unique_color('color_b');
+  $color_c = chart_unique_color('color_c');
 
   foreach ($s['arr'] as $key => $el) {
     $chart['#data'][] = array($el);
-    $chart['#data_colors'][] = $key == $s['watch']['index'] ? $color_a : $color_b;
+    if ($key == $s['watch']['index']) {
+      $chart['#data_colors'][] = $color_a;
+    } elseif (($key == $s['watch']['index'] + 1) && $s['watch']['to_swap']) {
+      $chart['#data_colors'][] = $color_b;
+    } else {
+      $chart['#data_colors'][] = $color_c;
+    } 
   }
 
   $form['bubblesort']['chart'] = array(
@@ -169,8 +181,12 @@ function bubblesort_form($form, &$form_state) {
     '#markup' => theme('chart', array('chart' => $chart))
   );
 
+  // Output an array.
+  $options = array();
+  foreach ($s['arr'] as $key => $value) {
+    $options[$key] = $key . ': ' . $value;
+  }
 
-  //Build the tableselect.
   $form['bubblesort']['arr'] = array(
     '#type' => 'select',
     '#options' => $options,
@@ -180,7 +196,7 @@ function bubblesort_form($form, &$form_state) {
     '#value' => $s['watch']['index']
   );
 
-
+  // Shufle button.
   $form['bubblesort']['shuffle'] = array(
     '#type' => 'submit',
     '#value' => t('Shuffle'),
@@ -193,6 +209,7 @@ function bubblesort_form($form, &$form_state) {
     ),
   );
 
+  // Step button.
   $form['bubblesort']['step'] = array(
     '#type' => 'submit',
     '#value' => t('Step'),
