@@ -146,6 +146,30 @@ function bubblesort_form($form, &$form_state) {
     $options[$key] = $key . ': ' . $value;
   }
 
+  $chart = array(
+    '#chart_id' => 'test_chart',
+    '#type' => CHART_TYPE_BAR_V_GROUPED,
+    '#title' => '',
+    '#size' => array(
+      '#width' => 300,
+      '#height' => 180
+    ),
+  );
+
+  $color_a = chart_unique_color('color_a');
+  $color_b = chart_unique_color('color_b');
+
+  foreach ($s['arr'] as $key => $el) {
+    $chart['#data'][] = array($el);
+    $chart['#data_colors'][] = $key == $s['watch']['index'] ? $color_a : $color_b;
+  }
+
+  $form['bubblesort']['chart'] = array(
+    '#type' => 'markup',
+    '#markup' => theme('chart', array('chart' => $chart))
+  );
+
+
   //Build the tableselect.
   $form['bubblesort']['arr'] = array(
     '#type' => 'select',
@@ -155,6 +179,7 @@ function bubblesort_form($form, &$form_state) {
     '#size' => 10,
     '#value' => $s['watch']['index']
   );
+
 
   $form['bubblesort']['shuffle'] = array(
     '#type' => 'submit',

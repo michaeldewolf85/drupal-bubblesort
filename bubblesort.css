@@ -5,7 +5,6 @@
   width: 120px;
   display: inline-block;
   margin-right: 20px;
-
 }
 
 #bubblesort [id^="edit-index"],
@@ -13,4 +12,11 @@
 #bubblesort [id^="edit-next"],
 #bubblesort [id^="edit-to-swap"] {
   width: 120px;
+}
+
+#bubblesort .chart {
+  float: left;
+}
+
+#form-submit .form-submit {
 }

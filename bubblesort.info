@@ -3,4 +3,5 @@ description = Provides Buble Sort Simulation
 package = Other
 version = VERSION
 core = 7.x
+dependencies[] = chart
 
