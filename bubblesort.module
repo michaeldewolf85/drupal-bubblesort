@@ -85,6 +85,9 @@ function _bubblesort_watch(&$arr, &$i, &$j) {
   );
 }
 
+/**
+ * Bubble Sort Simulation form.
+ */
 function bubblesort_form($form, &$form_state) {
   // Add CSS file.
   drupal_add_css(drupal_get_path('module', 'bubblesort') . '/bubblesort.css');
@@ -226,11 +229,9 @@ function bubblesort_form($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Bubble Sort Simulation ajax handler.
+ */
 function bubblesort_form_ajax($form, &$form_state) {
   return $form['bubblesort'];
 }
-
-function bubblesort_form_submit($form, &$form_state) {
-
-}
-
