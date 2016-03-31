@@ -1,3 +1,7 @@
+#bubblesort {
+  height: 700px;
+}
+
 #bubblesort .form-item-index,
 #bubblesort .form-item-current,
 #bubblesort .form-item-next,
@@ -15,8 +19,97 @@
 }
 
 #bubblesort .chart {
-  float: left;
+  float: right;
 }
 
-#form-submit .form-submit {
+#bubblesort .field-name-bubblesort-index,
+#bubblesort .field-name-bubblesort-index-value {
+  background-color: #ff8000;
+  color: black;
+}
+
+#bubblesort .bubblesort-next-swap {
+  background-color: #63dc90;
+  color: black;
+}
+
+#bubblesort .bubblesort-next-keep {
+  background-color: #ff2c00;
+  color: white;
+}
+
+/* A trick to get the correct color for the index at the array list */
+#bubblesort option:checked {
+  background: linear-gradient(#ff8000, #ff8000);
+}
+
+/* Autoplay Switch */
+.onoffswitch {
+  position: relative;
+  width: 147px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+  display: none;
+}
+label[for^="edit-play"] {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid #999999;
+  border-radius: 20px;
+}
+.onoffswitch-inner {
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before,
+.onoffswitch-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 30px;
+  padding: 0;
+  line-height: 30px;
+  font-size: 14px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+  content: "Auto Play ON";
+  padding-left: 10px;
+  background-color: #38ad4b;
+  color: #ffffff;
+}
+.onoffswitch-inner:after {
+  content: "Auto Play OFF";
+  padding-right: 10px;
+  background-color: #d13434;
+  color: #ffffff;
+  text-align: right;
+}
+.onoffswitch-switch {
+  display: block;
+  width: 18px;
+  margin: 6px;
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 113px;
+  border: 2px solid #999999;
+  border-radius: 20px;
+  transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + label[for^="edit-play"] .onoffswitch-inner {
+  margin-left: 0;
+}
+.onoffswitch-checkbox:checked + label[for^="edit-play"] .onoffswitch-switch {
+  right: 0px;
 }
